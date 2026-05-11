@@ -56,7 +56,10 @@ body {
   font-size: 13px;
   font-weight: 600;
   border-left: 4px solid transparent;
-  transition: color 0.15s, background 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    background 0.15s,
+    border-color 0.15s;
 }
 
 .sidebar-nav li a i {

@@ -87,7 +87,9 @@ describe('ValidatorView', () => {
   });
 
   it('calls updateRequest when approving', async () => {
-    vi.mocked(api.updateRequest).mockResolvedValue({ data: { ...mockRequests[0], status: 'Approved' } } as never);
+    vi.mocked(api.updateRequest).mockResolvedValue({
+      data: { ...mockRequests[0], status: 'Approved' },
+    } as never);
     const wrapper = mountView();
     await flushPromises();
     await wrapper.find('button.btn-success').trigger('click');

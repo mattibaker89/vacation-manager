@@ -1,9 +1,11 @@
 # Vacation Manager — Claude Context
 
 ## What this project is
+
 A full-stack vacation request management app built as a recruitment home assignment. Two interfaces: Requester (submit requests) and Validator (approve/reject). See ROADMAP.md for full milestone history.
 
 ## Stack
+
 - **Frontend**: Vue 3 + Vite + Vue Router + Axios + Bootstrap 5 — in `frontend/`
 - **Backend**: Node.js + Express + TypeORM + TypeScript — in `backend/`
 - **Database**: PostgreSQL 16 (local)
@@ -12,6 +14,7 @@ A full-stack vacation request management app built as a recruitment home assignm
 - **CI**: GitHub Actions at `.github/workflows/ci.yml`
 
 ## Running the project
+
 ```bash
 # Install all deps
 pnpm install
@@ -32,6 +35,7 @@ pnpm test
 ```
 
 ## Key files
+
 - `backend/src/index.ts` — Express app entry, also exports `app` for tests
 - `backend/src/config/database.ts` — TypeORM DataSource (uses `.env` / `.env.test`)
 - `backend/src/entity/User.ts` — User entity (id, name, role: Requester|Validator)
@@ -44,14 +48,17 @@ pnpm test
 - `frontend/src/router/index.ts` — Vue Router (/ → /requester, /validator)
 
 ## Environment
+
 - `backend/.env` — dev DB config
 - `backend/.env.test` — test DB (`vacation_manager_test`, port 3001)
 - Vite proxies `/api` → `http://localhost:3000`
 
 ## Current state
+
 All steps in ROADMAP.md are complete. The project has not been committed to git yet — next step is first commit and push to GitHub/Bitbucket.
 
 ## Known limitations (documented in README)
+
 - No auth — user identity is selected from a dropdown for demo purposes
 - TypeORM `synchronize: true` is dev-only (no migrations)
 - No pagination on validator dashboard

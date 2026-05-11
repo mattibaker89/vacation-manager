@@ -16,13 +16,19 @@
             class="btn btn-sm"
             :class="activeFilter === s ? 'btn-teal' : 'btn-outline-teal'"
             @click="setFilter(s)"
-          >{{ s }}</button>
-          <span class="text-muted ms-2" style="font-size:11px;">{{ requests.length }} result(s)</span>
+          >
+            {{ s }}
+          </button>
+          <span class="text-muted ms-2" style="font-size: 11px"
+            >{{ requests.length }} result(s)</span
+          >
         </div>
       </div>
       <div class="ibox-content no-padding">
         <div v-if="loading" class="p-4 text-center text-muted">Loading…</div>
-        <div v-else-if="requests.length === 0" class="p-4 text-center text-muted">No requests found.</div>
+        <div v-else-if="requests.length === 0" class="p-4 text-center text-muted">
+          No requests found.
+        </div>
         <table v-else class="table table-hover mb-0">
           <thead>
             <tr>
@@ -54,7 +60,9 @@
                     <i class="fa-solid fa-xmark me-1"></i>Reject
                   </button>
                 </div>
-                <span v-else class="text-muted" style="font-size:12px;">{{ req.comments || '—' }}</span>
+                <span v-else class="text-muted" style="font-size: 12px">{{
+                  req.comments || '—'
+                }}</span>
               </td>
             </tr>
           </tbody>
@@ -63,11 +71,16 @@
     </div>
 
     <!-- Reject modal -->
-    <div v-if="rejectModal.open" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.45)">
+    <div
+      v-if="rejectModal.open"
+      class="modal d-block"
+      tabindex="-1"
+      style="background: rgba(0, 0, 0, 0.45)"
+    >
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content" style="border-radius:2px;">
-          <div class="modal-header" style="border-bottom:1px solid #e7eaec;">
-            <h5 class="modal-title" style="font-size:14px;font-weight:700;">
+        <div class="modal-content" style="border-radius: 2px">
+          <div class="modal-header" style="border-bottom: 1px solid #e7eaec">
+            <h5 class="modal-title" style="font-size: 14px; font-weight: 700">
               <i class="fa-solid fa-xmark me-2 text-danger"></i>Reject Request
             </h5>
             <button class="btn-close" @click="closeReject" />
@@ -75,16 +88,22 @@
           <div class="modal-body">
             <label class="form-label">Comment <span class="text-danger">*</span></label>
             <textarea
+              v-model="rejectModal.comment"
               class="form-control"
               rows="3"
-              v-model="rejectModal.comment"
               placeholder="Provide a reason for rejection…"
             />
-            <div v-if="rejectModal.error" class="alert alert-danger mt-2 py-2 mb-0">{{ rejectModal.error }}</div>
+            <div v-if="rejectModal.error" class="alert alert-danger mt-2 py-2 mb-0">
+              {{ rejectModal.error }}
+            </div>
           </div>
-          <div class="modal-footer" style="border-top:1px solid #e7eaec;">
+          <div class="modal-footer" style="border-top: 1px solid #e7eaec">
             <button class="btn btn-sm btn-secondary" @click="closeReject">Cancel</button>
-            <button class="btn btn-sm btn-danger" @click="confirmReject" :disabled="rejectModal.submitting">
+            <button
+              class="btn btn-sm btn-danger"
+              :disabled="rejectModal.submitting"
+              @click="confirmReject"
+            >
               {{ rejectModal.submitting ? 'Rejecting…' : 'Confirm Reject' }}
             </button>
           </div>
@@ -105,7 +124,13 @@ const activeFilter = ref<Filter>('All');
 const requests = ref<VacationRequest[]>([]);
 const loading = ref(false);
 
-const rejectModal = ref({ open: false, requestId: null as number | null, comment: '', error: '', submitting: false });
+const rejectModal = ref({
+  open: false,
+  requestId: null as number | null,
+  comment: '',
+  error: '',
+  submitting: false,
+});
 
 onMounted(() => loadRequests());
 

@@ -5,7 +5,11 @@
       <h2><i class="fa-solid fa-paper-plane me-2"></i>My Vacation Requests</h2>
       <div class="user-selector">
         <label>I am:</label>
-        <select class="form-select form-select-sm w-auto" v-model="selectedUserId" @change="loadRequests">
+        <select
+          v-model="selectedUserId"
+          class="form-select form-select-sm w-auto"
+          @change="loadRequests"
+        >
           <option v-for="u in requesters" :key="u.id" :value="u.id">{{ u.name }}</option>
         </select>
       </div>
@@ -21,15 +25,33 @@
           <div class="row g-3">
             <div class="col-md-4">
               <label class="form-label">Start Date <span class="text-danger">*</span></label>
-              <input type="date" class="form-control" v-model="form.startDate" :min="today" @change="onStartDateChange" required />
+              <input
+                v-model="form.startDate"
+                type="date"
+                class="form-control"
+                :min="today"
+                required
+                @change="onStartDateChange"
+              />
             </div>
             <div class="col-md-4">
               <label class="form-label">End Date <span class="text-danger">*</span></label>
-              <input type="date" class="form-control" v-model="form.endDate" :min="minEndDate" required />
+              <input
+                v-model="form.endDate"
+                type="date"
+                class="form-control"
+                :min="minEndDate"
+                required
+              />
             </div>
             <div class="col-md-4">
               <label class="form-label">Reason (optional)</label>
-              <input type="text" class="form-control" v-model="form.reason" placeholder="e.g. Family trip" />
+              <input
+                v-model="form.reason"
+                type="text"
+                class="form-control"
+                placeholder="e.g. Family trip"
+              />
             </div>
           </div>
           <div v-if="formError" class="alert alert-danger mt-3 mb-0 py-2">{{ formError }}</div>
@@ -50,7 +72,9 @@
       </div>
       <div class="ibox-content no-padding">
         <div v-if="loading" class="p-4 text-center text-muted">Loading…</div>
-        <div v-else-if="requests.length === 0" class="p-4 text-center text-muted">No requests yet.</div>
+        <div v-else-if="requests.length === 0" class="p-4 text-center text-muted">
+          No requests yet.
+        </div>
         <table v-else class="table table-hover mb-0">
           <thead>
             <tr>
@@ -82,7 +106,13 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import { getUsers, getMyRequests, submitRequest as apiSubmit, type VacationRequest, type User } from '../api/requests';
+import {
+  getUsers,
+  getMyRequests,
+  submitRequest as apiSubmit,
+  type VacationRequest,
+  type User,
+} from '../api/requests';
 
 const requesters = ref<User[]>([]);
 const selectedUserId = ref<number | null>(null);

@@ -15,15 +15,15 @@ A full-stack web application for managing employee vacation requests, built as p
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | Vue 3 + Vite + Vue Router + Axios + Bootstrap 5 |
-| Backend | Node.js + Express + TypeScript |
-| ORM | TypeORM |
-| Database | PostgreSQL 16 |
-| Package manager | pnpm (monorepo workspace) |
-| Testing | Vitest (frontend) + Jest + Supertest (backend) |
-| CI | GitHub Actions |
+| Layer           | Technology                                      |
+| --------------- | ----------------------------------------------- |
+| Frontend        | Vue 3 + Vite + Vue Router + Axios + Bootstrap 5 |
+| Backend         | Node.js + Express + TypeScript                  |
+| ORM             | TypeORM                                         |
+| Database        | PostgreSQL 16                                   |
+| Package manager | pnpm (monorepo workspace)                       |
+| Testing         | Vitest (frontend) + Jest + Supertest (backend)  |
+| CI              | GitHub Actions                                  |
 
 ---
 
@@ -85,6 +85,7 @@ pnpm --filter backend seed
 ```
 
 This creates:
+
 - **Alice Martin** (Requester)
 - **Bob Smith** (Requester)
 - **Carol Jones** (Validator)
@@ -122,30 +123,35 @@ pnpm --filter frontend test
 
 ## API Reference
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/users` | List all users |
-| POST | `/api/requests` | Submit a vacation request |
-| GET | `/api/requests` | Get all requests (optionally filter by `?userId=` or `?status=`) |
-| PATCH | `/api/requests/:id` | Approve or reject a request |
+| Method | Endpoint            | Description                                                      |
+| ------ | ------------------- | ---------------------------------------------------------------- |
+| GET    | `/api/users`        | List all users                                                   |
+| POST   | `/api/requests`     | Submit a vacation request                                        |
+| GET    | `/api/requests`     | Get all requests (optionally filter by `?userId=` or `?status=`) |
+| PATCH  | `/api/requests/:id` | Approve or reject a request                                      |
 
 ---
 
 ## Technical Decisions
 
 ### Vite instead of Vue CLI
+
 Vue CLI is in maintenance mode. Vite is the officially recommended build tool for Vue 3 — faster dev server and build times.
 
 ### TypeORM with `synchronize: true`
+
 For this assignment the schema is auto-synced from entities on startup. In production, proper migrations would replace this.
 
 ### pnpm workspace
+
 Both `backend/` and `frontend/` are managed from the root, allowing shared scripts (`pnpm test`, `pnpm dev:backend`) without duplication.
 
 ### Bootstrap 5 for UI
+
 Chosen for responsive grid, pre-built components (badges, modals, tables), and Inspinia-style admin aesthetics — no extra UI library overhead.
 
 ### Supertest for backend tests
+
 Integration tests hit a real test database (`vacation_manager_test`), matching the production code path exactly. No mocking of TypeORM.
 
 ---

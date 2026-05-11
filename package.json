@@ -6,6 +6,19 @@
     "dev:backend": "pnpm --filter backend dev",
     "dev:frontend": "pnpm --filter frontend dev",
     "build": "pnpm --filter backend build && pnpm --filter frontend build",
-    "test": "pnpm --filter backend test && pnpm --filter frontend test"
+    "test": "pnpm --filter backend test && pnpm --filter frontend test",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.3.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.9.1",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.3",
+    "typescript-eslint": "^8.59.2"
   }
 }

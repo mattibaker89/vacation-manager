@@ -6,19 +6,17 @@ import { User } from '../entity/User';
 import { VacationRequest } from '../entity/VacationRequest';
 
 let requesterId: number;
-let validatorId: number;
 
 beforeAll(async () => {
   await AppDataSource.initialize();
   await AppDataSource.getRepository(VacationRequest).clear();
   await AppDataSource.getRepository(User).clear();
 
-  const [requester, validator] = await AppDataSource.getRepository(User).save([
+  const [requester] = await AppDataSource.getRepository(User).save([
     { name: 'Test Requester', role: 'Requester' },
     { name: 'Test Validator', role: 'Validator' },
   ]);
   requesterId = requester.id;
-  validatorId = validator.id;
 });
 
 afterAll(async () => {

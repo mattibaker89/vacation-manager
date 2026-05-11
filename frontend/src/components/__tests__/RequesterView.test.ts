@@ -83,7 +83,7 @@ describe('RequesterView', () => {
     await wrapper.find('form').trigger('submit');
     await flushPromises();
     expect(api.submitRequest).toHaveBeenCalledWith(
-      expect.objectContaining({ startDate: '2026-07-01', endDate: '2026-07-10' })
+      expect.objectContaining({ startDate: '2026-07-01', endDate: '2026-07-10' }),
     );
   });
 });
