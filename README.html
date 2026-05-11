@@ -284,15 +284,6 @@ pnpm install</code></pre>
       <div class="step">
         <div class="step-num">4</div>
         <div class="step-body">
-          <h3>Create databases</h3>
-          <pre><code>psql postgres -c "CREATE DATABASE vacation_manager;"
-psql postgres -c "CREATE DATABASE vacation_manager_test;"</code></pre>
-        </div>
-      </div>
-
-      <div class="step">
-        <div class="step-num">5</div>
-        <div class="step-body">
           <h3>Start the servers</h3>
           <p>Open two terminals:</p>
           <pre><code># Terminal 1 — backend on :3000
@@ -300,12 +291,12 @@ pnpm dev:backend
 
 # Terminal 2 — frontend on :5173
 pnpm dev:frontend</code></pre>
-          <p style="margin-top:8px; font-size:0.86rem; color:#555">Then open <strong>http://localhost:5173</strong> in your browser. Users are seeded automatically on first startup.</p>
+          <p style="margin-top:8px; font-size:0.86rem; color:#555">Then open <strong>http://localhost:5173</strong> in your browser. The database and seed users are created automatically on first startup.</p>
         </div>
       </div>
 
       <div class="step">
-        <div class="step-num">6</div>
+        <div class="step-num">5</div>
         <div class="step-body">
           <h3>Run the tests</h3>
           <pre><code>pnpm test</code></pre>

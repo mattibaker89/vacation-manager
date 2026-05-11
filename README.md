@@ -73,26 +73,7 @@ PORT=3000
 
 > **Note on `DB_USERNAME`:** On macOS with Homebrew-installed PostgreSQL the default superuser is your system username (run `whoami` to check). On Linux/Windows it is typically `postgres`.
 
-### 4. Create the databases
-
-```bash
-psql postgres -c "CREATE DATABASE vacation_manager;"
-psql postgres -c "CREATE DATABASE vacation_manager_test;"
-```
-
-### 5. Seed users
-
-```bash
-pnpm --filter backend seed
-```
-
-This creates:
-
-- **Alice Martin** (Requester)
-- **Bob Smith** (Requester)
-- **Carol Jones** (Validator)
-
-### 6. Start the application
+### 4. Start the application
 
 In two separate terminals:
 
@@ -105,6 +86,8 @@ pnpm dev:frontend
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+> The database and seed users are created automatically on first startup — no extra steps needed.
 
 ---
 
