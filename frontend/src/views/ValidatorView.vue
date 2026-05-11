@@ -19,9 +19,6 @@
           >
             {{ s }}
           </button>
-          <span class="text-muted ms-2" style="font-size: 11px"
-            >{{ requests.length }} result(s)</span
-          >
         </div>
       </div>
       <div class="ibox-content no-padding">
@@ -53,11 +50,11 @@
               <td>{{ formatDate(req.createdAt) }}</td>
               <td>
                 <div v-if="req.status === 'Pending'" class="d-flex gap-2">
-                  <button class="btn btn-xs btn-success" @click="approve(req.id)">
-                    <i class="fa-solid fa-check me-1"></i>Approve
+                  <button class="btn-action btn-action-approve" @click="approve(req.id)">
+                    <i class="fa-solid fa-check"></i> Approve
                   </button>
-                  <button class="btn btn-xs btn-danger" @click="openReject(req.id)">
-                    <i class="fa-solid fa-xmark me-1"></i>Reject
+                  <button class="btn-action btn-action-reject" @click="openReject(req.id)">
+                    <i class="fa-solid fa-xmark"></i> Reject
                   </button>
                 </div>
                 <span v-else class="text-muted" style="font-size: 12px">{{
@@ -67,6 +64,13 @@
             </tr>
           </tbody>
         </table>
+        <div v-if="!loading && requests.length > 0" class="table-footer">
+          Showing <strong>{{ requests.length }}</strong>
+          {{ requests.length === 1 ? 'request' : 'requests' }}
+          <span v-if="activeFilter !== 'All'">
+            · filtered by <span class="footer-filter-badge">{{ activeFilter }}</span>
+          </span>
+        </div>
       </div>
     </div>
 

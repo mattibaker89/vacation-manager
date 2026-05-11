@@ -186,8 +186,8 @@ body {
 /* ── Status labels ───────────────────────────────────── */
 .label {
   display: inline-block;
-  padding: 3px 8px;
-  border-radius: 2px;
+  padding: 3px 10px;
+  border-radius: 20px;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -296,6 +296,66 @@ body {
   background: #18a689;
   border-color: #18a689;
   color: #fff;
+}
+
+/* ── Action buttons (approve / reject) ───────────────── */
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  border: 1.5px solid;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.btn-action-approve {
+  color: #1ab394;
+  border-color: #1ab394;
+}
+
+.btn-action-approve:hover {
+  background: #1ab394;
+  color: #fff;
+}
+
+.btn-action-reject {
+  color: #ed5565;
+  border-color: #ed5565;
+}
+
+.btn-action-reject:hover {
+  background: #ed5565;
+  color: #fff;
+}
+
+/* ── Table footer ─────────────────────────────────────── */
+.table-footer {
+  padding: 10px 20px;
+  font-size: 12px;
+  color: #999;
+  border-top: 1px solid #e7eaec;
+  background: #fafafa;
+}
+
+.footer-filter-badge {
+  display: inline-block;
+  background: #e7eaec;
+  color: #676a6c;
+  font-weight: 700;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 1px 7px;
+  border-radius: 10px;
 }
 
 /* ── Responsive ──────────────────────────────────────── */
