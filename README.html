@@ -283,9 +283,22 @@ pnpm install</code></pre>
         <div class="step-num">3</div>
         <div class="step-body">
           <h3>Configure the environment</h3>
-          <p>Copy the example file and fill in your PostgreSQL username (run <code>whoami</code> on macOS with Homebrew).</p>
-          <pre><code>cp backend/.env.example backend/.env
-# Edit backend/.env with your DB credentials</code></pre>
+          <p><strong>macOS / Linux:</strong></p>
+          <pre><code>cp backend/.env.example backend/.env</code></pre>
+          <p><strong>Windows:</strong></p>
+          <pre><code>copy backend\.env.example backend\.env</code></pre>
+          <p>Then edit <code>backend/.env</code>:</p>
+          <pre><code>DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=&lt;your_postgres_username&gt;
+DB_PASSWORD=&lt;your_postgres_password&gt;
+DB_NAME=vacation_manager
+PORT=3000</code></pre>
+          <p style="margin-top:8px; font-size:0.85rem; color:#555">
+            <strong>DB_USERNAME:</strong> macOS (Homebrew) → your system username (<code>whoami</code>). Windows / Linux → typically <code>postgres</code>.<br/>
+            <strong>DB_PASSWORD:</strong> macOS (Homebrew) → usually blank. Windows → password set during PostgreSQL installation. Linux → depends on setup.<br/>
+            If running tests, apply the same credentials to <code>backend/.env.test</code>.
+          </p>
         </div>
       </div>
 

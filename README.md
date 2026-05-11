@@ -56,10 +56,16 @@ pnpm install
 
 ### 3. Configure environment
 
-Copy the example env file and fill in your PostgreSQL username:
+Copy the example env file:
 
+**macOS / Linux**
 ```bash
 cp backend/.env.example backend/.env
+```
+
+**Windows**
+```cmd
+copy backend\.env.example backend\.env
 ```
 
 Then edit `backend/.env`:
@@ -68,12 +74,21 @@ Then edit `backend/.env`:
 DB_HOST=localhost
 DB_PORT=5432
 DB_USERNAME=<your_postgres_username>
-DB_PASSWORD=
+DB_PASSWORD=<your_postgres_password>
 DB_NAME=vacation_manager
 PORT=3000
 ```
 
-> **Note on `DB_USERNAME`:** On macOS with Homebrew-installed PostgreSQL the default superuser is your system username (run `whoami` to check). On Linux/Windows it is typically `postgres`.
+> **`DB_USERNAME`**
+> - **macOS (Homebrew):** your system username — run `whoami` to find it
+> - **Windows / Linux:** typically `postgres`
+>
+> **`DB_PASSWORD`**
+> - **macOS (Homebrew):** usually no password — leave `DB_PASSWORD=` empty
+> - **Windows:** the password you set during PostgreSQL installation
+> - **Linux:** depends on your setup; blank is common for local dev installs
+
+If you also want to run the test suite, apply the same username and password to `backend/.env.test`.
 
 ### 4. Start the application
 
