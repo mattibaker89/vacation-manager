@@ -10,8 +10,8 @@ let validatorId: number;
 
 beforeAll(async () => {
   await AppDataSource.initialize();
-  await AppDataSource.getRepository(VacationRequest).delete({});
-  await AppDataSource.getRepository(User).delete({});
+  await AppDataSource.getRepository(VacationRequest).clear();
+  await AppDataSource.getRepository(User).clear();
 
   const [requester, validator] = await AppDataSource.getRepository(User).save([
     { name: 'Test Requester', role: 'Requester' },
@@ -22,8 +22,8 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await AppDataSource.getRepository(VacationRequest).delete({});
-  await AppDataSource.getRepository(User).delete({});
+  await AppDataSource.getRepository(VacationRequest).clear();
+  await AppDataSource.getRepository(User).clear();
   await AppDataSource.destroy();
 });
 
