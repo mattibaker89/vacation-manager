@@ -26,44 +26,46 @@
         <div v-else-if="requests.length === 0" class="p-4 text-center text-muted">
           No requests found.
         </div>
-        <table v-else class="table table-hover mb-0">
-          <thead>
-            <tr>
-              <th>Employee</th>
-              <th>Start</th>
-              <th>End</th>
-              <th>Reason</th>
-              <th>Status</th>
-              <th>Submitted</th>
-              <th>Actions / Comments</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="req in requests" :key="req.id">
-              <td class="fw-semibold">{{ req.user.name }}</td>
-              <td>{{ formatDate(req.startDate) }}</td>
-              <td>{{ formatDate(req.endDate) }}</td>
-              <td>{{ req.reason || '—' }}</td>
-              <td>
-                <span :class="statusLabel(req.status)" class="label">{{ req.status }}</span>
-              </td>
-              <td>{{ formatDate(req.createdAt) }}</td>
-              <td>
-                <div v-if="req.status === 'Pending'" class="d-flex gap-2">
-                  <button class="btn-action btn-action-approve" @click="approve(req.id)">
-                    <i class="fa-solid fa-check"></i> Approve
-                  </button>
-                  <button class="btn-action btn-action-reject" @click="openReject(req.id)">
-                    <i class="fa-solid fa-xmark"></i> Reject
-                  </button>
-                </div>
-                <span v-else class="text-muted" style="font-size: 12px">{{
-                  req.comments || '—'
-                }}</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-else class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Employee</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Actions / Comments</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="req in requests" :key="req.id">
+                <td class="fw-semibold">{{ req.user.name }}</td>
+                <td>{{ formatDate(req.startDate) }}</td>
+                <td>{{ formatDate(req.endDate) }}</td>
+                <td>{{ req.reason || '—' }}</td>
+                <td>
+                  <span :class="statusLabel(req.status)" class="label">{{ req.status }}</span>
+                </td>
+                <td>{{ formatDate(req.createdAt) }}</td>
+                <td>
+                  <div v-if="req.status === 'Pending'" class="d-flex gap-2">
+                    <button class="btn-action btn-action-approve" @click="approve(req.id)">
+                      <i class="fa-solid fa-check"></i> Approve
+                    </button>
+                    <button class="btn-action btn-action-reject" @click="openReject(req.id)">
+                      <i class="fa-solid fa-xmark"></i> Reject
+                    </button>
+                  </div>
+                  <span v-else class="text-muted" style="font-size: 12px">{{
+                    req.comments || '—'
+                  }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <div v-if="!loading && requests.length > 0" class="table-footer">
           Showing <strong>{{ requests.length }}</strong>
           {{ requests.length === 1 ? 'request' : 'requests' }}

@@ -75,30 +75,32 @@
         <div v-else-if="requests.length === 0" class="p-4 text-center text-muted">
           No requests yet.
         </div>
-        <table v-else class="table table-hover mb-0">
-          <thead>
-            <tr>
-              <th>Start</th>
-              <th>End</th>
-              <th>Reason</th>
-              <th>Status</th>
-              <th>Comments</th>
-              <th>Submitted</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="req in requests" :key="req.id">
-              <td>{{ formatDate(req.startDate) }}</td>
-              <td>{{ formatDate(req.endDate) }}</td>
-              <td>{{ req.reason || '—' }}</td>
-              <td>
-                <span :class="statusLabel(req.status)" class="label">{{ req.status }}</span>
-              </td>
-              <td>{{ req.comments || '—' }}</td>
-              <td>{{ formatDate(req.createdAt) }}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div v-else class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead>
+              <tr>
+                <th>Start</th>
+                <th>End</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Comments</th>
+                <th>Submitted</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="req in requests" :key="req.id">
+                <td>{{ formatDate(req.startDate) }}</td>
+                <td>{{ formatDate(req.endDate) }}</td>
+                <td>{{ req.reason || '—' }}</td>
+                <td>
+                  <span :class="statusLabel(req.status)" class="label">{{ req.status }}</span>
+                </td>
+                <td>{{ req.comments || '—' }}</td>
+                <td>{{ formatDate(req.createdAt) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
