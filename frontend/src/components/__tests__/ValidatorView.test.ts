@@ -5,6 +5,8 @@ import ValidatorView from '../../views/ValidatorView.vue';
 import * as api from '../../api/requests';
 
 vi.mock('../../api/requests');
+// Chart.js requires a real canvas which jsdom doesn't provide — stub the whole stats component
+vi.mock('../../components/ValidatorStats.vue', () => ({ default: { template: '<div />' } }));
 
 const mockRequests = [
   {
@@ -31,7 +33,7 @@ const mockRequests = [
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes: [{ path: '/', component: ValidatorView }],
+  routes: [{ path: '/validator/requests', component: ValidatorView }],
 });
 
 function mountView() {
@@ -55,14 +57,14 @@ describe('ValidatorView', () => {
   it('shows Approve and Reject buttons only for Pending requests', async () => {
     const wrapper = mountView();
     await flushPromises();
-    const approveButtons = wrapper.findAll('button.btn-success');
+    const approveButtons = wrapper.findAll('button.btn-action-approve');
     expect(approveButtons.length).toBe(1);
   });
 
   it('calls getAllRequests with status filter when filter button clicked', async () => {
     const wrapper = mountView();
     await flushPromises();
-    const buttons = wrapper.findAll('.btn-group button');
+    const buttons = wrapper.findAll('.filter-group button');
     const pendingBtn = buttons.find((b) => b.text() === 'Pending');
     await pendingBtn!.trigger('click');
     await flushPromises();
@@ -72,7 +74,7 @@ describe('ValidatorView', () => {
   it('opens reject modal when Reject button clicked', async () => {
     const wrapper = mountView();
     await flushPromises();
-    const rejectBtn = wrapper.find('button.btn-danger');
+    const rejectBtn = wrapper.find('button.btn-action-reject');
     await rejectBtn.trigger('click');
     expect(wrapper.find('.modal').exists()).toBe(true);
   });
@@ -80,7 +82,7 @@ describe('ValidatorView', () => {
   it('shows error in modal when rejecting without a comment', async () => {
     const wrapper = mountView();
     await flushPromises();
-    await wrapper.find('button.btn-danger').trigger('click');
+    await wrapper.find('button.btn-action-reject').trigger('click');
     await wrapper.find('.modal-footer button.btn-danger').trigger('click');
     await flushPromises();
     expect(wrapper.text()).toContain('comment is required');
@@ -92,7 +94,7 @@ describe('ValidatorView', () => {
     } as never);
     const wrapper = mountView();
     await flushPromises();
-    await wrapper.find('button.btn-success').trigger('click');
+    await wrapper.find('button.btn-action-approve').trigger('click');
     await flushPromises();
     expect(api.updateRequest).toHaveBeenCalledWith(1, { status: 'Approved' });
   });

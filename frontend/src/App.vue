@@ -12,7 +12,12 @@
         </li>
         <li>
           <RouterLink to="/validator">
-            <i class="fa-solid fa-list-check"></i> Validator Dashboard
+            <i class="fa-solid fa-chart-line"></i> Dashboard
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/validator/requests">
+            <i class="fa-solid fa-list-check"></i> All Requests
           </RouterLink>
         </li>
       </ul>
