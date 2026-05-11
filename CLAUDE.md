@@ -2,7 +2,7 @@
 
 ## What this project is
 
-A full-stack vacation request management app built as a recruitment home assignment. Two interfaces: Requester (submit requests) and Validator (approve/reject). See ROADMAP.md for full milestone history.
+A full-stack vacation request management app. Two interfaces: Requester (submit requests) and Validator (approve/reject). See ROADMAP.md for full milestone history.
 
 ## Stack
 

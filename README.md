@@ -1,6 +1,6 @@
 # Vacation Manager
 
-A full-stack web application for managing employee vacation requests, built as part of a recruitment home assignment.
+A full-stack web application for managing employee vacation requests.
 
 ---
 
