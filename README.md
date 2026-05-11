@@ -50,24 +50,32 @@ cd vacation-manager
 pnpm install
 ```
 
-### 3. Create the databases
+### 3. Configure environment
+
+Copy the example env file and fill in your PostgreSQL username:
 
 ```bash
-psql -U postgres -c "CREATE DATABASE vacation_manager;"
-psql -U postgres -c "CREATE DATABASE vacation_manager_test;"
+cp backend/.env.example backend/.env
 ```
 
-### 4. Configure environment
-
-The backend ships with a default `.env`. Edit `backend/.env` if your PostgreSQL credentials differ:
+Then edit `backend/.env`:
 
 ```
 DB_HOST=localhost
 DB_PORT=5432
-DB_USERNAME=postgres
+DB_USERNAME=<your_postgres_username>
 DB_PASSWORD=
 DB_NAME=vacation_manager
 PORT=3000
+```
+
+> **Note on `DB_USERNAME`:** On macOS with Homebrew-installed PostgreSQL the default superuser is your system username (run `whoami` to check). On Linux/Windows it is typically `postgres`.
+
+### 4. Create the databases
+
+```bash
+psql postgres -c "CREATE DATABASE vacation_manager;"
+psql postgres -c "CREATE DATABASE vacation_manager_test;"
 ```
 
 ### 5. Seed users

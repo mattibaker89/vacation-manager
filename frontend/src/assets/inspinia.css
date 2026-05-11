@@ -1,0 +1,336 @@
+html,
+body,
+#app {
+  height: 100%;
+  min-height: 100vh;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background: #f3f3f4;
+  font-size: 13px;
+  color: #676a6c;
+}
+
+/* ── Layout ─────────────────────────────────────────── */
+#wrapper {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.navbar-static-side {
+  width: 220px;
+  flex-shrink: 0;
+  background: #2f4050;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-brand {
+  display: block;
+  background: #1ab394;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 18px 20px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-brand i {
+  margin-right: 8px;
+}
+
+.sidebar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li a {
+  display: block;
+  padding: 14px 20px;
+  color: #a7b1c2;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  border-left: 4px solid transparent;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.sidebar-nav li a i {
+  margin-right: 8px;
+  width: 16px;
+  text-align: center;
+}
+
+.sidebar-nav li a:hover,
+.sidebar-nav li a.router-link-active {
+  color: #fff;
+  background: #293847;
+  border-left-color: #fff;
+}
+
+#page-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f3f3f4;
+}
+
+.top-navigation {
+  background: #fff;
+  border-bottom: 1px solid #e7eaec;
+  padding: 0 25px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.top-navigation .app-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #676a6c;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.wrapper-content {
+  padding: 25px 30px;
+  flex: 1;
+}
+
+/* ── Page heading ────────────────────────────────────── */
+.page-heading {
+  border-top: 0;
+  padding: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.page-heading h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #676a6c;
+  margin: 0;
+}
+
+.page-heading .breadcrumb {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+}
+
+/* ── ibox panels ─────────────────────────────────────── */
+.ibox {
+  background: #fff;
+  border: 1px solid #e7eaec;
+  border-radius: 2px;
+  margin-bottom: 25px;
+}
+
+.ibox-title {
+  border-bottom: 1px solid #e7eaec;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ibox-title h5 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #676a6c;
+  margin: 0;
+}
+
+.ibox-content {
+  padding: 20px;
+}
+
+.ibox-content.no-padding {
+  padding: 0;
+}
+
+/* ── Tables ──────────────────────────────────────────── */
+.ibox .table th {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #676a6c;
+  border-top: none;
+  background: #f9f9f9;
+}
+
+.ibox .table td {
+  vertical-align: middle;
+  font-size: 13px;
+}
+
+/* ── Status labels ───────────────────────────────────── */
+.label {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #fff;
+}
+
+.label-warning {
+  background: #f8ac59;
+  color: #fff;
+}
+
+.label-success {
+  background: #1ab394;
+}
+
+.label-danger {
+  background: #ed5565;
+}
+
+/* ── Buttons ─────────────────────────────────────────── */
+.btn-primary {
+  background-color: #1ab394 !important;
+  border-color: #1ab394 !important;
+  color: #fff !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #18a689 !important;
+  border-color: #18a689 !important;
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+}
+
+/* ── Form controls ───────────────────────────────────── */
+.form-control:focus {
+  border-color: #1ab394;
+  box-shadow: 0 0 0 0.15rem rgba(26, 179, 148, 0.2);
+}
+
+.form-label {
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #676a6c;
+}
+
+/* ── User selector ───────────────────────────────────── */
+.user-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.user-selector label {
+  font-weight: 600;
+  margin: 0;
+  white-space: nowrap;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ── Filter buttons ──────────────────────────────────── */
+.filter-group .btn {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 2px;
+}
+
+.btn-xs {
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.btn-outline-teal {
+  color: #1ab394;
+  border-color: #1ab394;
+  background: transparent;
+}
+
+.btn-outline-teal:hover {
+  background: #1ab394;
+  border-color: #1ab394;
+  color: #fff;
+}
+
+.btn-teal {
+  background: #1ab394;
+  border-color: #1ab394;
+  color: #fff;
+}
+
+.btn-teal:hover {
+  background: #18a689;
+  border-color: #18a689;
+  color: #fff;
+}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 768px) {
+  #wrapper {
+    flex-direction: column;
+  }
+
+  .navbar-static-side {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sidebar-brand {
+    flex: 1;
+  }
+
+  .sidebar-nav {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .sidebar-nav li a {
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding: 10px 16px;
+  }
+
+  .sidebar-nav li a:hover,
+  .sidebar-nav li a.router-link-active {
+    border-bottom-color: #1ab394;
+    border-left-color: transparent;
+  }
+
+  .wrapper-content {
+    padding: 16px;
+  }
+}

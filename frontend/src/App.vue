@@ -1,18 +1,30 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-      <span class="navbar-brand fw-bold">Vacation Manager</span>
-      <div class="navbar-nav ms-auto">
-        <RouterLink class="nav-link" active-class="active" to="/requester">
-          My Requests
-        </RouterLink>
-        <RouterLink class="nav-link" active-class="active" to="/validator">
-          Validator Dashboard
-        </RouterLink>
+  <div id="wrapper">
+    <nav class="navbar-static-side">
+      <span class="sidebar-brand">
+        <i class="fa-solid fa-umbrella-beach"></i> Vacation Manager
+      </span>
+      <ul class="sidebar-nav">
+        <li>
+          <RouterLink to="/requester">
+            <i class="fa-solid fa-paper-plane"></i> My Requests
+          </RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/validator">
+            <i class="fa-solid fa-list-check"></i> Validator Dashboard
+          </RouterLink>
+        </li>
+      </ul>
+    </nav>
+
+    <div id="page-wrapper">
+      <div class="top-navigation">
+        <span class="app-title">Vacation Management System</span>
+      </div>
+      <div class="wrapper-content">
+        <RouterView />
       </div>
     </div>
-  </nav>
-  <div class="container py-4">
-    <RouterView />
   </div>
 </template>

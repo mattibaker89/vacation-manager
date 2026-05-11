@@ -1,28 +1,31 @@
 <template>
   <div>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="mb-0">My Vacation Requests</h2>
-      <div class="d-flex align-items-center gap-2">
-        <label class="form-label mb-0 fw-semibold">I am:</label>
+    <!-- Page heading -->
+    <div class="page-heading">
+      <h2><i class="fa-solid fa-paper-plane me-2"></i>My Vacation Requests</h2>
+      <div class="user-selector">
+        <label>I am:</label>
         <select class="form-select form-select-sm w-auto" v-model="selectedUserId" @change="loadRequests">
           <option v-for="u in requesters" :key="u.id" :value="u.id">{{ u.name }}</option>
         </select>
       </div>
     </div>
 
-    <!-- Request Form -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-header bg-primary text-white fw-semibold">Submit a New Request</div>
-      <div class="card-body">
+    <!-- Submit form -->
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5><i class="fa-solid fa-plus me-1"></i> Submit a New Request</h5>
+      </div>
+      <div class="ibox-content">
         <form @submit.prevent="submitRequest">
           <div class="row g-3">
             <div class="col-md-4">
               <label class="form-label">Start Date <span class="text-danger">*</span></label>
-              <input type="date" class="form-control" v-model="form.startDate" required />
+              <input type="date" class="form-control" v-model="form.startDate" :min="today" @change="onStartDateChange" required />
             </div>
             <div class="col-md-4">
               <label class="form-label">End Date <span class="text-danger">*</span></label>
-              <input type="date" class="form-control" v-model="form.endDate" required />
+              <input type="date" class="form-control" v-model="form.endDate" :min="minEndDate" required />
             </div>
             <div class="col-md-4">
               <label class="form-label">Reason (optional)</label>
@@ -31,7 +34,8 @@
           </div>
           <div v-if="formError" class="alert alert-danger mt-3 mb-0 py-2">{{ formError }}</div>
           <div class="mt-3">
-            <button type="submit" class="btn btn-primary" :disabled="submitting">
+            <button type="submit" class="btn btn-primary btn-sm px-4" :disabled="submitting">
+              <i class="fa-solid fa-paper-plane me-1"></i>
               {{ submitting ? 'Submitting…' : 'Submit Request' }}
             </button>
           </div>
@@ -39,14 +43,16 @@
       </div>
     </div>
 
-    <!-- Requests List -->
-    <div class="card shadow-sm">
-      <div class="card-header fw-semibold">My Requests</div>
-      <div class="card-body p-0">
+    <!-- Requests list -->
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5><i class="fa-solid fa-clock-rotate-left me-1"></i> My Requests</h5>
+      </div>
+      <div class="ibox-content no-padding">
         <div v-if="loading" class="p-4 text-center text-muted">Loading…</div>
         <div v-else-if="requests.length === 0" class="p-4 text-center text-muted">No requests yet.</div>
         <table v-else class="table table-hover mb-0">
-          <thead class="table-light">
+          <thead>
             <tr>
               <th>Start</th>
               <th>End</th>
@@ -62,7 +68,7 @@
               <td>{{ formatDate(req.endDate) }}</td>
               <td>{{ req.reason || '—' }}</td>
               <td>
-                <span :class="statusBadge(req.status)" class="badge">{{ req.status }}</span>
+                <span :class="statusLabel(req.status)" class="label">{{ req.status }}</span>
               </td>
               <td>{{ req.comments || '—' }}</td>
               <td>{{ formatDate(req.createdAt) }}</td>
@@ -75,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { getUsers, getMyRequests, submitRequest as apiSubmit, type VacationRequest, type User } from '../api/requests';
 
 const requesters = ref<User[]>([]);
@@ -86,6 +92,15 @@ const submitting = ref(false);
 const formError = ref('');
 
 const form = ref({ startDate: '', endDate: '', reason: '' });
+
+const today = computed(() => new Date().toISOString().split('T')[0]);
+const minEndDate = computed(() => form.value.startDate || today.value);
+
+function onStartDateChange() {
+  if (form.value.endDate && form.value.endDate < form.value.startDate) {
+    form.value.endDate = '';
+  }
+}
 
 onMounted(async () => {
   const { data } = await getUsers();
@@ -132,11 +147,11 @@ async function submitRequest() {
   }
 }
 
-function statusBadge(status: string) {
+function statusLabel(status: string) {
   return {
-    'bg-warning text-dark': status === 'Pending',
-    'bg-success': status === 'Approved',
-    'bg-danger': status === 'Rejected',
+    'label-warning': status === 'Pending',
+    'label-success': status === 'Approved',
+    'label-danger': status === 'Rejected',
   };
 }
 

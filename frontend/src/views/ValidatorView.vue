@@ -1,31 +1,30 @@
 <template>
   <div>
-    <h2 class="mb-4">Validator Dashboard</h2>
+    <!-- Page heading -->
+    <div class="page-heading">
+      <h2><i class="fa-solid fa-list-check me-2"></i>Validator Dashboard</h2>
+    </div>
 
-    <!-- Filter Bar -->
-    <div class="card shadow-sm mb-4">
-      <div class="card-body d-flex align-items-center gap-3">
-        <span class="fw-semibold">Filter by status:</span>
-        <div class="btn-group">
+    <!-- Filter + table -->
+    <div class="ibox">
+      <div class="ibox-title">
+        <h5><i class="fa-solid fa-table-list me-1"></i> All Requests</h5>
+        <div class="d-flex align-items-center gap-2 filter-group">
           <button
             v-for="s in statusOptions"
             :key="s"
             class="btn btn-sm"
-            :class="activeFilter === s ? 'btn-dark' : 'btn-outline-secondary'"
+            :class="activeFilter === s ? 'btn-teal' : 'btn-outline-teal'"
             @click="setFilter(s)"
           >{{ s }}</button>
+          <span class="text-muted ms-2" style="font-size:11px;">{{ requests.length }} result(s)</span>
         </div>
-        <span class="ms-auto text-muted small">{{ requests.length }} result(s)</span>
       </div>
-    </div>
-
-    <!-- Requests Table -->
-    <div class="card shadow-sm">
-      <div class="card-body p-0">
+      <div class="ibox-content no-padding">
         <div v-if="loading" class="p-4 text-center text-muted">Loading…</div>
         <div v-else-if="requests.length === 0" class="p-4 text-center text-muted">No requests found.</div>
-        <table v-else class="table table-hover mb-0 align-middle">
-          <thead class="table-light">
+        <table v-else class="table table-hover mb-0">
+          <thead>
             <tr>
               <th>Employee</th>
               <th>Start</th>
@@ -33,7 +32,7 @@
               <th>Reason</th>
               <th>Status</th>
               <th>Submitted</th>
-              <th>Actions</th>
+              <th>Actions / Comments</th>
             </tr>
           </thead>
           <tbody>
@@ -43,15 +42,19 @@
               <td>{{ formatDate(req.endDate) }}</td>
               <td>{{ req.reason || '—' }}</td>
               <td>
-                <span :class="statusBadge(req.status)" class="badge">{{ req.status }}</span>
+                <span :class="statusLabel(req.status)" class="label">{{ req.status }}</span>
               </td>
               <td>{{ formatDate(req.createdAt) }}</td>
               <td>
-                <div v-if="req.status === 'Pending'" class="d-flex gap-2 align-items-center">
-                  <button class="btn btn-sm btn-success" @click="approve(req.id)">Approve</button>
-                  <button class="btn btn-sm btn-danger" @click="openReject(req.id)">Reject</button>
+                <div v-if="req.status === 'Pending'" class="d-flex gap-2">
+                  <button class="btn btn-xs btn-success" @click="approve(req.id)">
+                    <i class="fa-solid fa-check me-1"></i>Approve
+                  </button>
+                  <button class="btn btn-xs btn-danger" @click="openReject(req.id)">
+                    <i class="fa-solid fa-xmark me-1"></i>Reject
+                  </button>
                 </div>
-                <span v-else class="text-muted small">{{ req.comments || '—' }}</span>
+                <span v-else class="text-muted" style="font-size:12px;">{{ req.comments || '—' }}</span>
               </td>
             </tr>
           </tbody>
@@ -59,16 +62,18 @@
       </div>
     </div>
 
-    <!-- Reject Modal -->
-    <div v-if="rejectModal.open" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.4)">
+    <!-- Reject modal -->
+    <div v-if="rejectModal.open" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,.45)">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Reject Request</h5>
+        <div class="modal-content" style="border-radius:2px;">
+          <div class="modal-header" style="border-bottom:1px solid #e7eaec;">
+            <h5 class="modal-title" style="font-size:14px;font-weight:700;">
+              <i class="fa-solid fa-xmark me-2 text-danger"></i>Reject Request
+            </h5>
             <button class="btn-close" @click="closeReject" />
           </div>
           <div class="modal-body">
-            <label class="form-label fw-semibold">Comment <span class="text-danger">*</span></label>
+            <label class="form-label">Comment <span class="text-danger">*</span></label>
             <textarea
               class="form-control"
               rows="3"
@@ -77,9 +82,9 @@
             />
             <div v-if="rejectModal.error" class="alert alert-danger mt-2 py-2 mb-0">{{ rejectModal.error }}</div>
           </div>
-          <div class="modal-footer">
-            <button class="btn btn-secondary" @click="closeReject">Cancel</button>
-            <button class="btn btn-danger" @click="confirmReject" :disabled="rejectModal.submitting">
+          <div class="modal-footer" style="border-top:1px solid #e7eaec;">
+            <button class="btn btn-sm btn-secondary" @click="closeReject">Cancel</button>
+            <button class="btn btn-sm btn-danger" @click="confirmReject" :disabled="rejectModal.submitting">
               {{ rejectModal.submitting ? 'Rejecting…' : 'Confirm Reject' }}
             </button>
           </div>
@@ -151,11 +156,11 @@ async function confirmReject() {
   }
 }
 
-function statusBadge(status: string) {
+function statusLabel(status: string) {
   return {
-    'bg-warning text-dark': status === 'Pending',
-    'bg-success': status === 'Approved',
-    'bg-danger': status === 'Rejected',
+    'label-warning': status === 'Pending',
+    'label-success': status === 'Approved',
+    'label-danger': status === 'Rejected',
   };
 }
 
