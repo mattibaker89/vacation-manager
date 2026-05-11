@@ -9,8 +9,8 @@ let requesterId: number;
 
 beforeAll(async () => {
   await AppDataSource.initialize();
-  await AppDataSource.getRepository(VacationRequest).clear();
-  await AppDataSource.getRepository(User).clear();
+  // TRUNCATE both tables together so the FK constraint doesn't block clearing users
+  await AppDataSource.query('TRUNCATE TABLE vacation_requests, users RESTART IDENTITY CASCADE');
 
   const [requester] = await AppDataSource.getRepository(User).save([
     { name: 'Test Requester', role: 'Requester' },
@@ -20,8 +20,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await AppDataSource.getRepository(VacationRequest).clear();
-  await AppDataSource.getRepository(User).clear();
+  await AppDataSource.query('TRUNCATE TABLE vacation_requests, users RESTART IDENTITY CASCADE');
   await AppDataSource.destroy();
 });
 

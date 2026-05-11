@@ -1,7 +1,8 @@
 const { Client } = require('pg');
 require('dotenv').config({ path: `${__dirname}/../../.env.test` });
 
-// Creates the test database if it doesn't exist, before any test suite runs.
+// Drops and recreates the test database before every test run to guarantee a clean slate.
+// This prevents stale table state from causing TypeORM synchronize conflicts.
 module.exports = async () => {
   const dbName = process.env.DB_NAME;
   const client = new Client({
@@ -12,13 +13,7 @@ module.exports = async () => {
     database: 'postgres',
   });
   await client.connect();
-  const { rowCount } = await client.query(
-    'SELECT 1 FROM pg_database WHERE datname = $1',
-    [dbName],
-  );
-  if (!rowCount) {
-    await client.query(`CREATE DATABASE "${dbName}"`);
-    console.log(`Created database: ${dbName}`);
-  }
+  await client.query(`DROP DATABASE IF EXISTS "${dbName}"`);
+  await client.query(`CREATE DATABASE "${dbName}"`);
   await client.end();
 };

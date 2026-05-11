@@ -23,14 +23,18 @@ app.use(errorHandler);
 
 const PORT = Number(process.env.PORT) || 3000;
 
-ensureDatabase()
-  .then(() => AppDataSource.initialize())
-  .then(seedIfEmpty)
-  .then(() => {
-    console.log('Database connected');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch((err) => {
-    console.error('Database connection failed:', err);
-    process.exit(1);
-  });
+// Guard prevents the startup chain from running when index.ts is imported by tests.
+// Tests call AppDataSource.initialize() themselves in beforeAll.
+if (require.main === module) {
+  ensureDatabase()
+    .then(() => AppDataSource.initialize())
+    .then(seedIfEmpty)
+    .then(() => {
+      console.log('Database connected');
+      app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    })
+    .catch((err) => {
+      console.error('Database connection failed:', err);
+      process.exit(1);
+    });
+}
