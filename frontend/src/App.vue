@@ -20,6 +20,11 @@
             <i class="fa-solid fa-list-check"></i> All Requests
           </RouterLink>
         </li>
+        <li>
+          <RouterLink to="/users">
+            <i class="fa-solid fa-users"></i> Users
+          </RouterLink>
+        </li>
       </ul>
     </nav>
 

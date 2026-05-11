@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import RequesterView from '../views/RequesterView.vue';
 import ValidatorDashboardView from '../views/ValidatorDashboardView.vue';
 import ValidatorView from '../views/ValidatorView.vue';
+import UsersView from '../views/UsersView.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,6 +11,7 @@ const router = createRouter({
     { path: '/requester', component: RequesterView },
     { path: '/validator', component: ValidatorDashboardView },
     { path: '/validator/requests', component: ValidatorView },
+    { path: '/users', component: UsersView },
   ],
 });
 

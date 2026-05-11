@@ -208,6 +208,14 @@ body {
   background: #ed5565;
 }
 
+.label-primary {
+  background: #1c84c6;
+}
+
+.label-default {
+  background: #aab2bd;
+}
+
 /* ── Buttons ─────────────────────────────────────────── */
 .btn-primary {
   background-color: #1ab394 !important;
