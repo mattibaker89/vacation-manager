@@ -206,8 +206,16 @@
         <p>Submit vacation requests with start/end dates and an optional reason. Includes a single-day shortcut checkbox and live status tracking.</p>
       </div>
       <div class="feature-card">
-        <h3>✅ Validator Dashboard</h3>
+        <h3>📊 Analytics Dashboard</h3>
+        <p>Stat cards for total, pending, approved and rejected requests. Bar, doughnut, and line charts showing trends across the last 6 months.</p>
+      </div>
+      <div class="feature-card">
+        <h3>✅ Request Management</h3>
         <p>Review all requests at a glance. Filter by status, approve in one click, or reject via a modal that requires a comment before submitting.</p>
+      </div>
+      <div class="feature-card">
+        <h3>👤 User Management</h3>
+        <p>View all users with their roles. Add new Requesters or Validators directly from the UI via a modal form.</p>
       </div>
       <div class="feature-card">
         <h3>🔒 Conflict Protection</h3>
@@ -320,25 +328,31 @@ pnpm dev:frontend</code></pre>
 │   ├── <span class="dir">middleware/</span>
 │   │   └── <span class="file">errorHandler.ts</span>   <span class="note"># Global Express error handler</span>
 │   ├── <span class="dir">routes/</span>
-│   │   ├── <span class="file">requests.ts</span>       <span class="note"># POST / GET / PATCH endpoints</span>
-│   │   └── <span class="file">users.ts</span>          <span class="note"># GET /api/users</span>
+│   │   ├── <span class="file">requests.ts</span>            <span class="note"># POST / GET / PATCH endpoints</span>
+│   │   └── <span class="file">users.ts</span>               <span class="note"># GET + POST /api/users</span>
 │   ├── <span class="dir">test/</span>
-│   │   └── <span class="file">requests.test.ts</span>  <span class="note"># Supertest integration tests</span>
-│   ├── <span class="file">index.ts</span>              <span class="note"># Express app entry point</span>
-│   ├── <span class="file">seed.ts</span>               <span class="note"># User seeding (startup + CLI)</span>
-│   └── <span class="file">types.ts</span>              <span class="note"># Shared TypeScript types</span>
+│   │   ├── <span class="file">globalSetup.js</span>         <span class="note"># Creates test DB before Jest runs</span>
+│   │   └── <span class="file">requests.test.ts</span>       <span class="note"># Supertest integration tests</span>
+│   ├── <span class="file">ensureDatabase.ts</span>          <span class="note"># Auto-creates DB on startup if missing</span>
+│   ├── <span class="file">index.ts</span>                   <span class="note"># Express app entry point</span>
+│   ├── <span class="file">seed.ts</span>                    <span class="note"># User seeding (startup + CLI)</span>
+│   └── <span class="file">types.ts</span>                   <span class="note"># Shared TypeScript types</span>
 └── <span class="dir">frontend/src/</span>
     ├── <span class="dir">api/</span>
-    │   ├── <span class="file">client.ts</span>         <span class="note"># Axios instance (Vite-proxied to backend)</span>
-    │   └── <span class="file">requests.ts</span>       <span class="note"># Typed API call functions</span>
-    ├── <span class="dir">components/__tests__/</span> <span class="note"># Vitest + Vue Test Utils component tests</span>
+    │   ├── <span class="file">client.ts</span>              <span class="note"># Axios instance (Vite-proxied to backend)</span>
+    │   └── <span class="file">requests.ts</span>            <span class="note"># Typed API call functions</span>
+    ├── <span class="dir">components/</span>
+    │   ├── <span class="file">ValidatorStats.vue</span>     <span class="note"># Stat cards + charts for the dashboard</span>
+    │   └── <span class="dir">__tests__/</span>             <span class="note"># Vitest + Vue Test Utils component tests</span>
     ├── <span class="dir">router/</span>
-    │   └── <span class="file">index.ts</span>          <span class="note"># Vue Router (requester / validator routes)</span>
+    │   └── <span class="file">index.ts</span>               <span class="note"># Vue Router</span>
     ├── <span class="dir">views/</span>
-    │   ├── <span class="file">RequesterView.vue</span> <span class="note"># Submit form + my requests list</span>
-    │   └── <span class="file">ValidatorView.vue</span> <span class="note"># Dashboard + approve/reject modal</span>
-    ├── <span class="file">App.vue</span>               <span class="note"># Root layout (sidebar + router-view)</span>
-    └── <span class="file">types.ts</span>              <span class="note"># Shared TypeScript interfaces</span>
+    │   ├── <span class="file">RequesterView.vue</span>      <span class="note"># Submit form + my requests list</span>
+    │   ├── <span class="file">ValidatorDashboardView.vue</span> <span class="note"># Charts + stat cards</span>
+    │   ├── <span class="file">ValidatorView.vue</span>      <span class="note"># All requests table + approve/reject</span>
+    │   └── <span class="file">UsersView.vue</span>          <span class="note"># User list + add user modal</span>
+    ├── <span class="file">App.vue</span>                    <span class="note"># Root layout (sidebar + router-view)</span>
+    └── <span class="file">types.ts</span>                   <span class="note"># Shared TypeScript interfaces</span>
     </div>
   </div>
 
@@ -354,6 +368,11 @@ pnpm dev:frontend</code></pre>
           <td><span class="method method-get">GET</span></td>
           <td><span class="endpoint">/api/users</span></td>
           <td>List all users</td>
+        </tr>
+        <tr>
+          <td><span class="method method-post">POST</span></td>
+          <td><span class="endpoint">/api/users</span></td>
+          <td>Create a new user. Body: <code>{ name, role }</code></td>
         </tr>
         <tr>
           <td><span class="method method-post">POST</span></td>
@@ -384,7 +403,7 @@ pnpm dev:frontend</code></pre>
       </div>
       <div class="decision-card">
         <h3>TypeORM <code>synchronize: true</code></h3>
-        <p>Schema is auto-synced from entities on startup for development convenience. In production this would be replaced with explicit TypeORM migrations.</p>
+        <p>Schema is auto-synced from entities on startup for development convenience. In production this would be replaced with explicit TypeORM migrations. The database itself is also created automatically on first run.</p>
       </div>
       <div class="decision-card">
         <h3>pnpm Workspace</h3>
@@ -412,7 +431,7 @@ pnpm dev:frontend</code></pre>
       <ul>
         <li><strong>No authentication</strong> — user identity is selected from a dropdown for demonstration. A real app would use JWT or session-based auth.</li>
         <li><strong><code>synchronize: true</code> is development-only</strong> — should be replaced with TypeORM migrations before any production deployment.</li>
-        <li><strong>No pagination</strong> — the validator dashboard loads all requests. For large datasets, server-side pagination would be required.</li>
+        <li><strong>No pagination</strong> — the All Requests page loads all requests at once. For large datasets, server-side pagination would be required.</li>
       </ul>
     </div>
   </div>

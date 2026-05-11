@@ -7,7 +7,9 @@ A full-stack web application for managing employee vacation requests.
 ## Features
 
 - **Requester Interface** — submit vacation requests (with optional single-day shortcut) and track their status in real time
-- **Validator Interface** — review all requests, filter by status, approve with one click, or reject with a required comment
+- **Validator Dashboard** — charts showing requests by month, approved vacations by month, and status breakdown
+- **Request Management** — review all requests, filter by status, approve with one click, or reject with a required comment
+- **Users Page** — view all users and add new ones via a modal form
 - Responsive UI with Bootstrap 5 (Inspinia-inspired admin theme)
 - RESTful API with input validation, error handling, and conflict protection
 - Full test suite: integration tests (backend) + component tests (frontend)
@@ -112,43 +114,51 @@ pnpm --filter frontend test
 vacation-manager/
 ├── backend/
 │   └── src/
-│       ├── config/database.ts      # TypeORM DataSource
+│       ├── config/database.ts        # TypeORM DataSource
 │       ├── entity/
-│       │   ├── User.ts             # User entity (id, name, role)
-│       │   └── VacationRequest.ts  # VacationRequest entity
+│       │   ├── User.ts               # User entity (id, name, role)
+│       │   └── VacationRequest.ts    # VacationRequest entity
 │       ├── middleware/
-│       │   └── errorHandler.ts     # Global Express error handler
+│       │   └── errorHandler.ts       # Global Express error handler
 │       ├── routes/
-│       │   ├── requests.ts         # POST / GET / PATCH request endpoints
-│       │   └── users.ts            # GET /api/users
-│       ├── test/requests.test.ts   # Supertest integration tests
-│       ├── index.ts                # Express app entry point
-│       ├── seed.ts                 # User seeding (startup + CLI)
-│       └── types.ts                # Shared TypeScript types
+│       │   ├── requests.ts           # POST / GET / PATCH request endpoints
+│       │   └── users.ts              # GET + POST /api/users
+│       ├── test/
+│       │   ├── globalSetup.js        # Creates test DB before Jest runs
+│       │   └── requests.test.ts      # Supertest integration tests
+│       ├── ensureDatabase.ts         # Auto-creates DB on startup if missing
+│       ├── index.ts                  # Express app entry point
+│       ├── seed.ts                   # User seeding (startup + CLI)
+│       └── types.ts                  # Shared TypeScript types
 └── frontend/
     └── src/
         ├── api/
-        │   ├── client.ts           # Axios instance (proxied to backend)
-        │   └── requests.ts         # Typed API call functions
-        ├── components/__tests__/   # Vitest component tests
-        ├── router/index.ts         # Vue Router (requester / validator routes)
+        │   ├── client.ts             # Axios instance (proxied to backend)
+        │   └── requests.ts           # Typed API call functions
+        ├── components/
+        │   ├── ValidatorStats.vue    # Stat cards + charts for the dashboard
+        │   └── __tests__/           # Vitest component tests
+        ├── router/index.ts           # Vue Router
         ├── views/
-        │   ├── RequesterView.vue   # Submit form + my requests list
-        │   └── ValidatorView.vue   # Dashboard + approve/reject modal
-        ├── App.vue                 # Root layout (sidebar + router-view)
-        └── types.ts                # Shared TypeScript interfaces
+        │   ├── RequesterView.vue     # Submit form + my requests list
+        │   ├── ValidatorDashboardView.vue  # Charts + stat cards
+        │   ├── ValidatorView.vue     # All requests table + approve/reject
+        │   └── UsersView.vue         # User list + add user modal
+        ├── App.vue                   # Root layout (sidebar + router-view)
+        └── types.ts                  # Shared TypeScript interfaces
 ```
 
 ---
 
 ## API Reference
 
-| Method | Endpoint            | Description                                                      |
-| ------ | ------------------- | ---------------------------------------------------------------- |
-| GET    | `/api/users`        | List all users                                                   |
-| POST   | `/api/requests`     | Submit a vacation request                                        |
+| Method | Endpoint            | Description                                                       |
+| ------ | ------------------- | ----------------------------------------------------------------- |
+| GET    | `/api/users`        | List all users                                                    |
+| POST   | `/api/users`        | Create a new user (`name`, `role`)                                |
+| POST   | `/api/requests`     | Submit a vacation request                                         |
 | GET    | `/api/requests`     | Get all requests (optionally filter by `?userId=` or `?status=`) |
-| PATCH  | `/api/requests/:id` | Approve or reject a request                                      |
+| PATCH  | `/api/requests/:id` | Approve or reject a request                                       |
 
 ---
 
@@ -160,7 +170,7 @@ Vue CLI is in maintenance mode. Vite is the officially recommended build tool fo
 
 ### TypeORM with `synchronize: true`
 
-For this assignment the schema is auto-synced from entities on startup. In production, proper migrations would replace this.
+The schema is auto-synced from entities on startup for development convenience. In production, proper migrations would replace this.
 
 ### pnpm workspace
 
@@ -180,4 +190,4 @@ Integration tests hit a real test database (`vacation_manager_test`), matching t
 
 - No authentication — users are selected from a dropdown for demonstration purposes
 - `synchronize: true` is development-only and should be replaced with TypeORM migrations before production deployment
-- No pagination on the validator dashboard
+- No pagination on the All Requests page
