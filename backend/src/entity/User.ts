@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { VacationRequest } from './VacationRequest';
-
-export type UserRole = 'Requester' | 'Validator';
+import type { UserRole } from '../types';
 
 @Entity('users')
 export class User {

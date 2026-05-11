@@ -7,8 +7,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { User } from './User';
-
-export type RequestStatus = 'Pending' | 'Approved' | 'Rejected';
+import type { RequestStatus } from '../types';
 
 @Entity('vacation_requests')
 export class VacationRequest {

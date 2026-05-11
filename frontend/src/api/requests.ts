@@ -1,21 +1,7 @@
 import api from './client';
+import type { User, VacationRequest, SubmitRequestPayload, UpdateRequestPayload } from '../types';
 
-export interface VacationRequest {
-  id: number;
-  startDate: string;
-  endDate: string;
-  reason: string | null;
-  status: 'Pending' | 'Approved' | 'Rejected';
-  comments: string | null;
-  createdAt: string;
-  user: { id: number; name: string; role: string };
-}
-
-export interface User {
-  id: number;
-  name: string;
-  role: 'Requester' | 'Validator';
-}
+export type { User, VacationRequest };
 
 export const getUsers = () => api.get<User[]>('/users');
 
@@ -25,12 +11,8 @@ export const getMyRequests = (userId: number) =>
 export const getAllRequests = (status?: string) =>
   api.get<VacationRequest[]>(`/requests${status ? `?status=${status}` : ''}`);
 
-export const submitRequest = (payload: {
-  userId: number;
-  startDate: string;
-  endDate: string;
-  reason?: string;
-}) => api.post<VacationRequest>('/requests', payload);
+export const submitRequest = (payload: SubmitRequestPayload) =>
+  api.post<VacationRequest>('/requests', payload);
 
-export const updateRequest = (id: number, payload: { status: string; comments?: string }) =>
+export const updateRequest = (id: number, payload: UpdateRequestPayload) =>
   api.patch<VacationRequest>(`/requests/${id}`, payload);
