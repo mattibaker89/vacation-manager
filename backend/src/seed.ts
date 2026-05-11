@@ -5,17 +5,10 @@ import { User } from './entity/User';
 
 dotenv.config();
 
-async function seed() {
-  await AppDataSource.initialize();
-
+export async function seedIfEmpty(): Promise<void> {
   const userRepo = AppDataSource.getRepository(User);
-
   const existing = await userRepo.count();
-  if (existing > 0) {
-    console.log('Users already seeded, skipping.');
-    await AppDataSource.destroy();
-    return;
-  }
+  if (existing > 0) return;
 
   await userRepo.save([
     { name: 'Alice Martin', role: 'Requester' },
@@ -24,10 +17,15 @@ async function seed() {
   ]);
 
   console.log('Seeded: 2 Requesters, 1 Validator');
-  await AppDataSource.destroy();
 }
 
-seed().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// Standalone script entrypoint (pnpm seed)
+if (require.main === module) {
+  AppDataSource.initialize()
+    .then(seedIfEmpty)
+    .then(() => AppDataSource.destroy())
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+}

@@ -3,6 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { AppDataSource } from './config/database';
+import { seedIfEmpty } from './seed';
 import requestsRouter from './routes/requests';
 import usersRouter from './routes/users';
 import { errorHandler } from './middleware/errorHandler';
@@ -22,6 +23,7 @@ app.use(errorHandler);
 const PORT = Number(process.env.PORT) || 3000;
 
 AppDataSource.initialize()
+  .then(seedIfEmpty)
   .then(() => {
     console.log('Database connected');
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
