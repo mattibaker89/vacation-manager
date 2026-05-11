@@ -34,7 +34,7 @@
                 @change="onStartDateChange"
               />
             </div>
-            <div class="col-md-4">
+            <div v-if="!singleDay" class="col-md-4">
               <label class="form-label">End Date <span class="text-danger">*</span></label>
               <input
                 v-model="form.endDate"
@@ -44,7 +44,7 @@
                 required
               />
             </div>
-            <div class="col-md-4">
+            <div :class="singleDay ? 'col-md-8' : 'col-md-4'">
               <label class="form-label">Reason (optional)</label>
               <input
                 v-model="form.reason"
@@ -53,6 +53,15 @@
                 placeholder="e.g. Family trip"
               />
             </div>
+          </div>
+          <div class="form-check mt-3">
+            <input
+              id="singleDay"
+              v-model="singleDay"
+              type="checkbox"
+              class="form-check-input"
+            />
+            <label class="form-check-label" for="singleDay">Single day vacation</label>
           </div>
           <div v-if="formError" class="alert alert-danger mt-3 mb-0 py-2">{{ formError }}</div>
           <div class="mt-3">
@@ -124,6 +133,7 @@ const submitting = ref(false);
 const formError = ref('');
 
 const form = ref({ startDate: '', endDate: '', reason: '' });
+const singleDay = ref(false);
 
 const today = computed(() => new Date().toISOString().split('T')[0]);
 const minEndDate = computed(() => form.value.startDate || today.value);
@@ -153,11 +163,11 @@ async function loadRequests() {
 
 async function submitRequest() {
   formError.value = '';
-  if (!form.value.startDate || !form.value.endDate) {
+  if (!form.value.startDate || (!singleDay.value && !form.value.endDate)) {
     formError.value = 'Start date and end date are required.';
     return;
   }
-  if (new Date(form.value.endDate) < new Date(form.value.startDate)) {
+  if (!singleDay.value && new Date(form.value.endDate) < new Date(form.value.startDate)) {
     formError.value = 'End date must be on or after start date.';
     return;
   }
@@ -166,10 +176,11 @@ async function submitRequest() {
     await apiSubmit({
       userId: selectedUserId.value!,
       startDate: form.value.startDate,
-      endDate: form.value.endDate,
+      endDate: singleDay.value ? form.value.startDate : form.value.endDate,
       reason: form.value.reason || undefined,
     });
     form.value = { startDate: '', endDate: '', reason: '' };
+    singleDay.value = false;
     await loadRequests();
   } catch (e: unknown) {
     const err = e as { response?: { data?: { error?: string } } };
