@@ -1,0 +1,11 @@
+{
+  "name": "vacation-manager",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:frontend": "pnpm --filter frontend dev",
+    "build": "pnpm --filter backend build && pnpm --filter frontend build",
+    "test": "pnpm --filter backend test && pnpm --filter frontend test"
+  }
+}
