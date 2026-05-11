@@ -396,4 +396,54 @@ body {
   .wrapper-content {
     padding: 16px;
   }
+
+  /* ── Table → card transformation ── */
+  .table-responsive {
+    overflow-x: visible;
+  }
+
+  .ibox .table thead {
+    display: none;
+  }
+
+  .ibox .table,
+  .ibox .table tbody,
+  .ibox .table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .ibox .table tr {
+    border: 1px solid #e7eaec;
+    border-radius: 6px;
+    margin: 12px 16px;
+    width: calc(100% - 32px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    background: #fff;
+  }
+
+  .ibox .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid #f3f3f4;
+    border-top: none;
+    font-size: 13px;
+  }
+
+  .ibox .table td:last-child {
+    border-bottom: none;
+  }
+
+  .ibox .table td::before {
+    content: attr(data-label);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #aaa;
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
 }

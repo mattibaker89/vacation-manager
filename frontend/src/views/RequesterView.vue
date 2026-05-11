@@ -89,14 +89,14 @@
             </thead>
             <tbody>
               <tr v-for="req in requests" :key="req.id">
-                <td>{{ formatDate(req.startDate) }}</td>
-                <td>{{ formatDate(req.endDate) }}</td>
-                <td>{{ req.reason || '—' }}</td>
-                <td>
+                <td data-label="Start">{{ formatDate(req.startDate) }}</td>
+                <td data-label="End">{{ formatDate(req.endDate) }}</td>
+                <td data-label="Reason">{{ req.reason || '—' }}</td>
+                <td data-label="Status">
                   <span :class="statusLabel(req.status)" class="label">{{ req.status }}</span>
                 </td>
-                <td>{{ req.comments || '—' }}</td>
-                <td>{{ formatDate(req.createdAt) }}</td>
+                <td data-label="Comments">{{ req.comments || '—' }}</td>
+                <td data-label="Submitted">{{ formatDate(req.createdAt) }}</td>
               </tr>
             </tbody>
           </table>

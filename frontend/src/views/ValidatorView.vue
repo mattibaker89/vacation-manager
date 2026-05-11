@@ -41,15 +41,15 @@
             </thead>
             <tbody>
               <tr v-for="req in requests" :key="req.id">
-                <td class="fw-semibold">{{ req.user.name }}</td>
-                <td>{{ formatDate(req.startDate) }}</td>
-                <td>{{ formatDate(req.endDate) }}</td>
-                <td>{{ req.reason || '—' }}</td>
-                <td>
+                <td class="fw-semibold" data-label="Employee">{{ req.user.name }}</td>
+                <td data-label="Start">{{ formatDate(req.startDate) }}</td>
+                <td data-label="End">{{ formatDate(req.endDate) }}</td>
+                <td data-label="Reason">{{ req.reason || '—' }}</td>
+                <td data-label="Status">
                   <span :class="statusLabel(req.status)" class="label">{{ req.status }}</span>
                 </td>
-                <td>{{ formatDate(req.createdAt) }}</td>
-                <td>
+                <td data-label="Submitted">{{ formatDate(req.createdAt) }}</td>
+                <td data-label="Actions">
                   <div v-if="req.status === 'Pending'" class="d-flex gap-2">
                     <button class="btn-action btn-action-approve" @click="approve(req.id)">
                       <i class="fa-solid fa-check"></i> Approve
