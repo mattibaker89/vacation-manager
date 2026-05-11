@@ -19,7 +19,8 @@ export async function seedIfEmpty(): Promise<void> {
   console.log('Seeded: 2 Requesters, 1 Validator');
 }
 
-// Standalone script entrypoint (pnpm seed)
+// require.main guard lets this file act as both an importable function (called
+// from index.ts on startup) and a standalone CLI script (pnpm seed).
 if (require.main === module) {
   AppDataSource.initialize()
     .then(seedIfEmpty)

@@ -13,6 +13,8 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || '',
   database: process.env.DB_NAME || 'vacation_manager',
+  // synchronize: true auto-applies entity schema on startup — dev only.
+  // Replace with TypeORM migrations before deploying to production.
   synchronize: true,
   logging: false,
   entities: [User, VacationRequest],

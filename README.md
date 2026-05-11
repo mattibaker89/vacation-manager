@@ -6,10 +6,12 @@ A full-stack web application for managing employee vacation requests, built as p
 
 ## Features
 
-- **Requester Interface** — submit vacation requests and track their status
-- **Validator Interface** — review, approve, or reject requests with filters and comments
-- Responsive UI with Bootstrap 5
-- RESTful API with input validation and error handling
+- **Requester Interface** — submit vacation requests (with optional single-day shortcut) and track their status in real time
+- **Validator Interface** — review all requests, filter by status, approve with one click, or reject with a required comment
+- Responsive UI with Bootstrap 5 (Inspinia-inspired admin theme)
+- RESTful API with input validation, error handling, and conflict protection
+- Full test suite: integration tests (backend) + component tests (frontend)
+- GitHub Actions CI pipeline
 
 ---
 
@@ -40,7 +42,7 @@ A full-stack web application for managing employee vacation requests, built as p
 ### 1. Clone the repository
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/mattibaker89/vacation-manager.git
 cd vacation-manager
 ```
 
@@ -117,6 +119,41 @@ pnpm --filter backend test
 
 # Frontend only
 pnpm --filter frontend test
+```
+
+---
+
+## Project Structure
+
+```
+vacation-manager/
+├── backend/
+│   └── src/
+│       ├── config/database.ts      # TypeORM DataSource
+│       ├── entity/
+│       │   ├── User.ts             # User entity (id, name, role)
+│       │   └── VacationRequest.ts  # VacationRequest entity
+│       ├── middleware/
+│       │   └── errorHandler.ts     # Global Express error handler
+│       ├── routes/
+│       │   ├── requests.ts         # POST / GET / PATCH request endpoints
+│       │   └── users.ts            # GET /api/users
+│       ├── test/requests.test.ts   # Supertest integration tests
+│       ├── index.ts                # Express app entry point
+│       ├── seed.ts                 # User seeding (startup + CLI)
+│       └── types.ts                # Shared TypeScript types
+└── frontend/
+    └── src/
+        ├── api/
+        │   ├── client.ts           # Axios instance (proxied to backend)
+        │   └── requests.ts         # Typed API call functions
+        ├── components/__tests__/   # Vitest component tests
+        ├── router/index.ts         # Vue Router (requester / validator routes)
+        ├── views/
+        │   ├── RequesterView.vue   # Submit form + my requests list
+        │   └── ValidatorView.vue   # Dashboard + approve/reject modal
+        ├── App.vue                 # Root layout (sidebar + router-view)
+        └── types.ts                # Shared TypeScript interfaces
 ```
 
 ---

@@ -89,6 +89,7 @@ router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => 
       return;
     }
 
+    // 409 Conflict: prevent double-actioning an already-decided request
     if (vacationRequest.status !== 'Pending') {
       res.status(409).json({ error: 'Only Pending requests can be updated' });
       return;
