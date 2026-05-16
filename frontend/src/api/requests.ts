@@ -3,13 +3,15 @@ import type { User, VacationRequest, SubmitRequestPayload, UpdateRequestPayload 
 
 export type { User, VacationRequest };
 
+export const login = (name: string, password: string) =>
+  api.post<{ token: string; user: User }>('/auth/login', { name, password });
+
 export const getUsers = () => api.get<User[]>('/users');
 
-export const createUser = (payload: { name: string; role: string }) =>
+export const createUser = (payload: { name: string; role: string; password: string }) =>
   api.post<User>('/users', payload);
 
-export const getMyRequests = (userId: number) =>
-  api.get<VacationRequest[]>(`/requests?userId=${userId}`);
+export const getMyRequests = () => api.get<VacationRequest[]>('/requests');
 
 export const getAllRequests = (status?: string) =>
   api.get<VacationRequest[]>(`/requests${status ? `?status=${status}` : ''}`);

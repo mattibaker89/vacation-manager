@@ -2,16 +2,18 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { AppDataSource } from '../config/database';
 import { VacationRequest } from '../entity/VacationRequest';
 import { User } from '../entity/User';
+import { requireAuth, requireValidator } from '../middleware/auth';
 
 const router = Router();
 
-// POST /api/requests — submit a vacation request
-router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+// POST /api/requests — Requester submits a vacation request; userId comes from JWT
+router.post('/', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { userId, startDate, endDate, reason } = req.body;
+    const { startDate, endDate, reason } = req.body;
+    const userId = req.auth!.sub;
 
-    if (!userId || !startDate || !endDate) {
-      res.status(400).json({ error: 'userId, startDate, and endDate are required' });
+    if (!startDate || !endDate) {
+      res.status(400).json({ error: 'startDate and endDate are required' });
       return;
     }
 
@@ -20,8 +22,7 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
       return;
     }
 
-    const userRepo = AppDataSource.getRepository(User);
-    const user = await userRepo.findOneBy({ id: Number(userId) });
+    const user = await AppDataSource.getRepository(User).findOneBy({ id: userId });
     if (!user) {
       res.status(404).json({ error: 'User not found' });
       return;
@@ -42,16 +43,17 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-// GET /api/requests — all requests (validator) or by user (?userId=)
-router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+// GET /api/requests — Validators see all; Requesters see only their own
+router.get('/', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const repo = AppDataSource.getRepository(VacationRequest);
-    const { userId, status } = req.query;
+    const { status } = req.query;
+    const { sub: userId, role } = req.auth!;
 
     const qb = repo.createQueryBuilder('vr').leftJoinAndSelect('vr.user', 'user');
 
-    if (userId) {
-      qb.andWhere('user.id = :userId', { userId: Number(userId) });
+    if (role !== 'Validator') {
+      qb.andWhere('user.id = :userId', { userId });
     }
     if (status) {
       qb.andWhere('vr.status = :status', { status });
@@ -65,8 +67,8 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-// PATCH /api/requests/:id — approve or reject
-router.patch('/:id', async (req: Request, res: Response, next: NextFunction) => {
+// PATCH /api/requests/:id — approve or reject (Validators only)
+router.patch('/:id', requireValidator, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { status, comments } = req.body;
     const id = Number(req.params.id);

@@ -13,6 +13,9 @@ export class User {
   @Column({ type: 'varchar' })
   role!: UserRole;
 
+  @Column({ select: false })
+  password!: string;
+
   @OneToMany(() => VacationRequest, (req) => req.user)
   vacationRequests!: VacationRequest[];
 }

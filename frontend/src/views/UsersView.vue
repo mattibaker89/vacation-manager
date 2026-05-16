@@ -67,15 +67,23 @@
                 type="text"
                 class="form-control"
                 placeholder="e.g. Jane Doe"
-                @keyup.enter="submit"
               />
             </div>
-            <div>
+            <div class="mb-3">
               <label class="form-label">Role <span class="text-danger">*</span></label>
               <select v-model="modal.role" class="form-select">
                 <option value="Requester">Requester</option>
                 <option value="Validator">Validator</option>
               </select>
+            </div>
+            <div>
+              <label class="form-label">Password <span class="text-danger">*</span></label>
+              <input
+                v-model="modal.password"
+                type="password"
+                class="form-control"
+                placeholder="At least 6 characters"
+              />
             </div>
             <div v-if="modal.error" class="alert alert-danger mt-3 mb-0 py-2">
               {{ modal.error }}
@@ -104,6 +112,7 @@ const modal = ref({
   open: false,
   name: '',
   role: 'Requester' as 'Requester' | 'Validator',
+  password: '',
   error: '',
   submitting: false,
 });
@@ -116,7 +125,7 @@ onMounted(async () => {
 });
 
 function openModal() {
-  modal.value = { open: true, name: '', role: 'Requester', error: '', submitting: false };
+  modal.value = { open: true, name: '', role: 'Requester', password: '', error: '', submitting: false };
 }
 
 function closeModal() {
@@ -128,10 +137,18 @@ async function submit() {
     modal.value.error = 'Name is required.';
     return;
   }
+  if (!modal.value.password || modal.value.password.length < 6) {
+    modal.value.error = 'Password must be at least 6 characters.';
+    return;
+  }
   modal.value.submitting = true;
   modal.value.error = '';
   try {
-    const { data } = await createUser({ name: modal.value.name.trim(), role: modal.value.role });
+    const { data } = await createUser({
+      name: modal.value.name.trim(),
+      role: modal.value.role,
+      password: modal.value.password,
+    });
     users.value.push(data);
     closeModal();
   } catch (e: unknown) {

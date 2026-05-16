@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 import { AppDataSource } from './config/database';
 import { User } from './entity/User';
 
@@ -10,10 +11,12 @@ export async function seedIfEmpty(): Promise<void> {
   const existing = await userRepo.count();
   if (existing > 0) return;
 
+  const hash = (pw: string) => bcrypt.hash(pw, 10);
+
   await userRepo.save([
-    { name: 'Alice Martin', role: 'Requester' },
-    { name: 'Bob Smith', role: 'Requester' },
-    { name: 'Carol Jones', role: 'Validator' },
+    { name: 'Alice Martin', role: 'Requester', password: await hash('alice123') },
+    { name: 'Bob Smith', role: 'Requester', password: await hash('bob123') },
+    { name: 'Carol Jones', role: 'Validator', password: await hash('carol123') },
   ]);
 
   console.log('Seeded: 2 Requesters, 1 Validator');
