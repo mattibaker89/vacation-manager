@@ -105,12 +105,26 @@ describe('POST /api/requests', () => {
 });
 
 describe('GET /api/requests', () => {
+  let requesterReqId: number;
+  let validatorReqId: number;
+
+  beforeEach(async () => {
+    await AppDataSource.getRepository(VacationRequest).clear();
+    const [r1, r2] = await AppDataSource.getRepository(VacationRequest).save([
+      { user: { id: requesterId }, startDate: '2026-09-01', endDate: '2026-09-03', status: 'Pending' },
+      { user: { id: validatorId }, startDate: '2026-09-10', endDate: '2026-09-12', status: 'Pending' },
+    ]);
+    requesterReqId = r1.id;
+    validatorReqId = r2.id;
+  });
+
   it('returns all requests for a Validator', async () => {
     const res = await request(app)
       .get('/api/requests')
       .set('Authorization', `Bearer ${validatorToken}`);
     expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
+    const ids = res.body.map((r: VacationRequest) => r.id);
+    expect(ids).toEqual(expect.arrayContaining([requesterReqId, validatorReqId]));
   });
 
   it('returns only own requests for a Requester', async () => {
@@ -118,7 +132,10 @@ describe('GET /api/requests', () => {
       .get('/api/requests')
       .set('Authorization', `Bearer ${requesterToken}`);
     expect(res.status).toBe(200);
+    expect(res.body.length).toBeGreaterThan(0);
     res.body.forEach((r: VacationRequest) => expect(r.user.id).toBe(requesterId));
+    const ids = res.body.map((r: VacationRequest) => r.id);
+    expect(ids).not.toContain(validatorReqId);
   });
 
   it('returns 401 without a token', async () => {

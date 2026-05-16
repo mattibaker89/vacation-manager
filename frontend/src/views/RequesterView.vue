@@ -130,9 +130,12 @@ onMounted(loadRequests);
 
 async function loadRequests() {
   loading.value = true;
-  const { data } = await getMyRequests();
-  requests.value = data;
-  loading.value = false;
+  try {
+    const { data } = await getMyRequests();
+    requests.value = data;
+  } finally {
+    loading.value = false;
+  }
 }
 
 async function submitRequest() {

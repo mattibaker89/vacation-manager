@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../config/database';
 import { User } from '../entity/User';
+import { requireAuth } from '../middleware/auth';
 
 const router = Router();
 
@@ -36,16 +37,9 @@ router.post('/login', async (req: Request, res: Response, next: NextFunction) =>
   }
 });
 
-router.get('/me', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/me', requireAuth, async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const auth = req.headers.authorization;
-    if (!auth?.startsWith('Bearer ')) {
-      res.status(401).json({ message: 'Unauthorized' });
-      return;
-    }
-
-    const payload = jwt.verify(auth.slice(7), JWT_SECRET) as unknown as { sub: number; role: string };
-    const user = await AppDataSource.getRepository(User).findOneBy({ id: payload.sub });
+    const user = await AppDataSource.getRepository(User).findOneBy({ id: req.auth!.sub });
 
     if (!user) {
       res.status(404).json({ message: 'User not found' });

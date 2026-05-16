@@ -12,8 +12,35 @@ function readStorage(key: string): string | null {
   }
 }
 
+function writeStorage(key: string, value: string) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // ignore quota / private-mode failures; in-memory state remains valid
+  }
+}
+
+function removeStorage(key: string) {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+    // ignore
+  }
+}
+
+function readUser(): User | null {
+  const raw = readStorage(USER_KEY);
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw) as User;
+  } catch {
+    removeStorage(USER_KEY);
+    return null;
+  }
+}
+
 const token = ref<string | null>(readStorage(TOKEN_KEY));
-const currentUser = ref<User | null>(JSON.parse(readStorage(USER_KEY) || 'null'));
+const currentUser = ref<User | null>(readUser());
 
 export function useAuth() {
   const isAuthenticated = computed(() => !!token.value);
@@ -22,15 +49,15 @@ export function useAuth() {
   function setSession(newToken: string, user: User) {
     token.value = newToken;
     currentUser.value = user;
-    localStorage.setItem(TOKEN_KEY, newToken);
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    writeStorage(TOKEN_KEY, newToken);
+    writeStorage(USER_KEY, JSON.stringify(user));
   }
 
   function clearSession() {
     token.value = null;
     currentUser.value = null;
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+    removeStorage(TOKEN_KEY);
+    removeStorage(USER_KEY);
   }
 
   function getToken() {
