@@ -28,7 +28,9 @@ body {
 }
 
 .sidebar-brand {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: #1ab394;
   color: #fff;
   font-size: 16px;
@@ -36,16 +38,18 @@ body {
   padding: 18px 20px;
   text-decoration: none;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .sidebar-brand i {
-  margin-right: 8px;
+  flex-shrink: 0;
 }
 
 .sidebar-nav {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex: 1;
 }
 
 .sidebar-nav li a {

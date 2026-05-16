@@ -3,16 +3,6 @@
     <!-- Page heading -->
     <div class="page-heading">
       <h2><i class="fa-solid fa-paper-plane me-2"></i>My Vacation Requests</h2>
-      <div class="user-selector">
-        <label>I am:</label>
-        <select
-          v-model="selectedUserId"
-          class="form-select form-select-sm w-auto"
-          @change="loadRequests"
-        >
-          <option v-for="u in requesters" :key="u.id" :value="u.id">{{ u.name }}</option>
-        </select>
-      </div>
     </div>
 
     <!-- Submit form -->
@@ -117,16 +107,8 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import {
-  getUsers,
-  getMyRequests,
-  submitRequest as apiSubmit,
-  type VacationRequest,
-  type User,
-} from '../api/requests';
+import { getMyRequests, submitRequest as apiSubmit, type VacationRequest } from '../api/requests';
 
-const requesters = ref<User[]>([]);
-const selectedUserId = ref<number | null>(null);
 const requests = ref<VacationRequest[]>([]);
 const loading = ref(false);
 const submitting = ref(false);
@@ -144,21 +126,16 @@ function onStartDateChange() {
   }
 }
 
-onMounted(async () => {
-  const { data } = await getUsers();
-  requesters.value = data.filter((u) => u.role === 'Requester');
-  if (requesters.value.length) {
-    selectedUserId.value = requesters.value[0].id;
-    await loadRequests();
-  }
-});
+onMounted(loadRequests);
 
 async function loadRequests() {
-  if (!selectedUserId.value) return;
   loading.value = true;
-  const { data } = await getMyRequests(selectedUserId.value);
-  requests.value = data;
-  loading.value = false;
+  try {
+    const { data } = await getMyRequests();
+    requests.value = data;
+  } finally {
+    loading.value = false;
+  }
 }
 
 async function submitRequest() {
@@ -174,7 +151,6 @@ async function submitRequest() {
   submitting.value = true;
   try {
     await apiSubmit({
-      userId: selectedUserId.value!,
       startDate: form.value.startDate,
       endDate: singleDay.value ? form.value.startDate : form.value.endDate,
       reason: form.value.reason || undefined,

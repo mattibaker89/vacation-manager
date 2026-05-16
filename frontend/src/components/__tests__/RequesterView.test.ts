@@ -6,11 +6,6 @@ import * as api from '../../api/requests';
 
 vi.mock('../../api/requests');
 
-const mockUsers = [
-  { id: 1, name: 'Alice', role: 'Requester' as const },
-  { id: 2, name: 'Carol', role: 'Validator' as const },
-];
-
 const mockRequests = [
   {
     id: 1,
@@ -36,7 +31,6 @@ function mountView() {
 }
 
 beforeEach(() => {
-  vi.mocked(api.getUsers).mockResolvedValue({ data: mockUsers } as never);
   vi.mocked(api.getMyRequests).mockResolvedValue({ data: mockRequests } as never);
 });
 
@@ -46,14 +40,6 @@ describe('RequesterView', () => {
     await flushPromises();
     expect(wrapper.find('form').exists()).toBe(true);
     expect(wrapper.find('input[type="date"]').exists()).toBe(true);
-  });
-
-  it('displays only Requester users in the dropdown', async () => {
-    const wrapper = mountView();
-    await flushPromises();
-    const options = wrapper.findAll('select option');
-    expect(options.length).toBe(1);
-    expect(options[0].text()).toBe('Alice');
   });
 
   it('shows existing requests in the table', async () => {

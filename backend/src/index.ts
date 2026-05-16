@@ -7,6 +7,7 @@ import { ensureDatabase } from './ensureDatabase';
 import { seedIfEmpty } from './seed';
 import requestsRouter from './routes/requests';
 import usersRouter from './routes/users';
+import authRouter from './routes/auth';
 import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
@@ -16,6 +17,7 @@ export const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/auth', authRouter);
 app.use('/api/requests', requestsRouter);
 app.use('/api/users', usersRouter);
 

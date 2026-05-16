@@ -16,7 +16,6 @@ export interface VacationRequest {
 }
 
 export interface SubmitRequestPayload {
-  userId: number;
   startDate: string;
   endDate: string;
   reason?: string;
